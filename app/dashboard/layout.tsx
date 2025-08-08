@@ -50,7 +50,7 @@ export default function DashboardLayout({
   ];
   return (
     <div className="flex flex-col md:flex-row h-screen">
-      <Sidebar>
+      <Sidebar animate={false}>
         <SidebarBody className="justify-between gap-10">
           <div className="flex flex-1 flex-col overflow-x-hidden overflow-y-auto">
             <SidebarLogo />
@@ -79,7 +79,7 @@ export default function DashboardLayout({
           </div>
         </SidebarBody>
       </Sidebar>
-      <div className="p-6 flex-1">{children}</div>
+      {children}
     </div>
   );
 }
