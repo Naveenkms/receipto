@@ -1,11 +1,22 @@
-import { s } from "motion/react-client";
 import { NextRequest } from "next/server";
+import { redirect } from "next/navigation";
+
+import { addReceipt } from "@/lib/data/reciepts";
+import { createClient } from "@/lib/supabase/server";
 
 const LLAMA_CLOUD_API_URL = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL;
 const LLAMA_CLOUD_API_KEY = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_KEY;
 const AGENT_ID = process.env.NEXT_PUBLIC_LLAMA_CLOUD_AGENT_ID;
 
 export async function POST(request: NextRequest) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error || !data?.user) {
+    redirect("/auth/login");
+  }
+
   const { fileId } = await request.json();
 
   // run extraction job
@@ -33,7 +44,7 @@ export async function POST(request: NextRequest) {
   const receipt: { id: string } = await response.json();
 
   // we are not awaiting for the extraction job to complete here. This is intentional.
-  handleExtractionResult(receipt.id);
+  handleExtractionResult(receipt.id, data.user.id);
 
   return new Response(JSON.stringify(receipt), { status: 201 });
 }
@@ -79,7 +90,7 @@ const pollForExtractionStatus = async (jobId: string) => {
   return status;
 };
 
-type ExtractionData = {
+export type ExtractionData = {
   receiptId: string;
   storeName: string;
   storeAddress: any;
@@ -135,14 +146,29 @@ const getExtractionResult = async (
   return await response.json();
 };
 
-const handleExtractionResult = async (jobId: string) => {
+const handleExtractionResult = async (jobId: string, userId: string) => {
   try {
     const status = await pollForExtractionStatus(jobId);
 
     if (status === "SUCCESS") {
-      console.log("Extraction job completed successfully:", jobId);
-      const result = await getExtractionResult(jobId);
-      console.log("Extraction result:", result);
+      const { data } = await getExtractionResult(jobId);
+
+      const result = await addReceipt({
+        userId,
+        total: data.total.toString(),
+        storeName: data.storeName,
+        storeAddress: data.storeAddress,
+        phoneNumber: data.phoneNumber,
+        date: data.date,
+        time: data.time,
+        items: data.items,
+        subtotal: data.subtotal.toString(),
+        tax: data.tax.toString(),
+        paymentMethod: data.paymentMethod,
+        cashier: data.cashier,
+        customerName: data.customerName,
+        customerEmail: data.customerEmail,
+      });
     }
   } catch (error) {
     console.error(error);

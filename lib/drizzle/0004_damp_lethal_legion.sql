@@ -1,0 +1,1 @@
+ALTER POLICY "users can create receipts" ON "receipts" TO authenticated WITH CHECK ("receipts"."user_id" = (select auth.uid()));

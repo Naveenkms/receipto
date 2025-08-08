@@ -28,7 +28,7 @@ export default function DashboardLayout({
     },
     {
       label: "Add Reciept",
-      href: "/dashboard/add-reciept",
+      href: "/dashboard/add-receipt",
       icon: (
         <Upload className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
       ),

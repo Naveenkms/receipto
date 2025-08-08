@@ -1,0 +1,2 @@
+CREATE POLICY "users can update their own receipts" ON "receipts" AS PERMISSIVE FOR UPDATE TO "authenticated" USING (true) WITH CHECK ("receipts"."user_id" = "auth"."users"."id");--> statement-breakpoint
+ALTER POLICY "users can create receipts" ON "receipts" TO authenticated WITH CHECK (true);

@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import z from "zod";
 
 import { createClient } from "@/lib/supabase/server";
-import { Schema, schema } from "../schema";
+import { schema, Schema } from "../schema";
 
-export async function login(currState: any, data: Schema) {
+export async function signup(currState: any, data: Schema) {
   const supabase = await createClient();
 
   const validateFields = schema.safeParse(data);
@@ -18,10 +18,10 @@ export async function login(currState: any, data: Schema) {
     };
   }
 
-  const { error } = await supabase.auth.signInWithPassword(validateFields.data);
+  const { error } = await supabase.auth.signUp(data);
 
   if (error) {
-    console.error("Login error:", error);
+    console.error("Signup error:", error);
     return {
       message: error.message,
     };
