@@ -1,1 +1,0 @@
-DROP POLICY "users can delete their own receipts" ON "receipts" CASCADE;

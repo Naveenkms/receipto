@@ -1,4 +1,5 @@
 import {
+  date,
   decimal,
   jsonb,
   pgPolicy,
@@ -8,7 +9,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import { authenticatedRole, authUsers } from "drizzle-orm/supabase";
+import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
 
 import { timestamps } from "../helpers/columns";
 import { ExtractionData } from "@/app/api/receipts/extract/route";
@@ -24,7 +25,7 @@ export const receipts = pgTable(
     storeName: text(),
     storeAddress: text(),
     phoneNumber: text(),
-    date: text(),
+    date: date().notNull(),
     time: text(),
     items: jsonb().$type<ExtractionData["items"]>(),
     subtotal: decimal({ precision: 10, scale: 2 }),
@@ -37,26 +38,26 @@ export const receipts = pgTable(
     ...timestamps,
   },
   (table) => [
-    pgPolicy("users can create receipts", {
+    pgPolicy("users can create their own receipts", {
       for: "insert",
       to: authenticatedRole,
-      withCheck: sql`true`,
+      withCheck: eq(table.userId, authUid),
     }),
     pgPolicy("users can see their own receipts", {
       for: "select",
       to: authenticatedRole,
-      using: sql`true`,
+      using: eq(table.userId, authUid),
     }),
     pgPolicy("users can update their own receipts", {
       for: "update",
       to: authenticatedRole,
-      using: sql`true`,
-      withCheck: sql`"receipts"."user_id" = "auth"."users"."id"`,
+      using: eq(table.userId, authUid),
+      withCheck: eq(table.userId, authUid),
     }),
     pgPolicy("users can delete their own receipts", {
       for: "delete",
       to: authenticatedRole,
-      using:  sql`true`,
+      using: eq(table.userId, authUid),
     }),
   ]
 );

@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 
 import { addReceipt } from "@/lib/data/reciepts";
 import { createClient } from "@/lib/supabase/server";
+import { revalidatePath } from "next/cache";
 
 const LLAMA_CLOUD_API_URL = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL;
 const LLAMA_CLOUD_API_KEY = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_KEY;
@@ -54,7 +55,7 @@ type STATUS = "PENDING" | "SUCCESS" | "ERROR" | "PARTIAL_SUCCESS" | "CANCELLED";
 const pollForExtractionStatus = async (jobId: string) => {
   let status: STATUS = "PENDING";
   let result = null;
-  const maxRetries = 10;
+  const maxRetries = 20;
   let retries = 0;
 
   while (status === "PENDING" && retries < maxRetries) {
@@ -90,8 +91,7 @@ const pollForExtractionStatus = async (jobId: string) => {
   return status;
 };
 
-export type ExtractionData = {
-  receiptId: string;
+export type ExtractionData = Partial<{
   storeName: string;
   storeAddress: any;
   phoneNumber: string;
@@ -105,7 +105,6 @@ export type ExtractionData = {
   }>;
   subtotal: number;
   tax: number;
-  total: number;
   paymentMethod: string;
   cardNumber: any;
   transactionId: any;
@@ -116,7 +115,7 @@ export type ExtractionData = {
   returnsPolicy: any;
   barcode: any;
   notes: string;
-};
+}> & { receiptId: string; total: number };
 
 type ExtractionResult = {
   run_id: string;
@@ -148,26 +147,28 @@ const getExtractionResult = async (
 
 const handleExtractionResult = async (jobId: string, userId: string) => {
   try {
+    console.log("Polling for extraction job status...");
     const status = await pollForExtractionStatus(jobId);
+    console.log("Extraction job status:", status);
 
     if (status === "SUCCESS") {
       const { data } = await getExtractionResult(jobId);
 
       const result = await addReceipt({
         userId,
-        total: data.total.toString(),
-        storeName: data.storeName,
-        storeAddress: data.storeAddress,
-        phoneNumber: data.phoneNumber,
-        date: data.date,
-        time: data.time,
-        items: data.items,
-        subtotal: data.subtotal.toString(),
-        tax: data.tax.toString(),
-        paymentMethod: data.paymentMethod,
-        cashier: data.cashier,
-        customerName: data.customerName,
-        customerEmail: data.customerEmail,
+        total: data?.total.toString(),
+        storeName: data?.storeName,
+        storeAddress: data?.storeAddress,
+        phoneNumber: data?.phoneNumber,
+        date: data?.date || new Date().toISOString().split("T")[0], // if date is not provided, use current date
+        time: data?.time,
+        items: data?.items,
+        subtotal: data?.subtotal?.toString(),
+        tax: data?.tax?.toString(),
+        paymentMethod: data?.paymentMethod,
+        cashier: data?.cashier,
+        customerName: data?.customerName,
+        customerEmail: data?.customerEmail,
       });
     }
   } catch (error) {

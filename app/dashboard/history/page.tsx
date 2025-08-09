@@ -1,7 +1,9 @@
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-import { getReceipts } from "@/lib/data/reciepts";
 import { createClient } from "@/lib/supabase/server";
+import PageHeader from "@/components/page-header";
+import DataTable from "./_components/data-table";
 
 export default async function HistoryPage() {
   const supabase = await createClient();
@@ -11,15 +13,14 @@ export default async function HistoryPage() {
     redirect("/auth/login");
   }
 
-  const receipts = await getReceipts();
-
-  if (!receipts) return null;
-
   return (
-    <div>
-      {receipts.map((receipt) => (
-        <div key={receipt.id}>{receipt.storeName}</div>
-      ))}
+    <div className="w-full flex flex-col">
+      <PageHeader>History</PageHeader>
+      <div className="py-4 px-4 md:px-6 flex-1 overflow-auto">
+        <Suspense fallback={<div>Loading table...</div>}>
+          <DataTable />
+        </Suspense>
+      </div>
     </div>
   );
 }

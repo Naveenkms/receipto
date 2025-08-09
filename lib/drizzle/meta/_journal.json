@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1754567529905,
-      "tag": "0000_puzzling_living_tribunal",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1754567683747,
-      "tag": "0001_tan_lady_vermin",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1754567841443,
-      "tag": "0002_legal_metal_master",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1754568033758,
-      "tag": "0003_pretty_red_wolf",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1754568172323,
-      "tag": "0004_damp_lethal_legion",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1754568556383,
-      "tag": "0005_cuddly_bishop",
+      "when": 1754749592344,
+      "tag": "0000_living_sue_storm",
       "breakpoints": true
     }
   ]

@@ -1,1 +1,0 @@
-CREATE POLICY "users can delete their own receipts" ON "receipts" AS PERMISSIVE FOR DELETE TO "authenticated" USING (true);

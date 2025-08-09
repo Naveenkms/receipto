@@ -1,5 +1,5 @@
 {
-  "id": "d1eac29e-71b5-4e3b-a67b-681672cb4870",
+  "id": "2352119c-b7d6-44d2-a59e-7b6a21b596b3",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -40,9 +40,9 @@
         },
         "date": {
           "name": "date",
-          "type": "text",
+          "type": "date",
           "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "time": {
           "name": "time",
@@ -132,14 +132,14 @@
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "policies": {
-        "users can create receipts": {
-          "name": "users can create receipts",
+        "users can create their own receipts": {
+          "name": "users can create their own receipts",
           "as": "PERMISSIVE",
           "for": "INSERT",
           "to": [
             "authenticated"
           ],
-          "withCheck": "true"
+          "withCheck": "\"receipts\".\"user_id\" = (select auth.uid())"
         },
         "users can see their own receipts": {
           "name": "users can see their own receipts",
@@ -148,7 +148,17 @@
           "to": [
             "authenticated"
           ],
-          "using": "true"
+          "using": "\"receipts\".\"user_id\" = (select auth.uid())"
+        },
+        "users can update their own receipts": {
+          "name": "users can update their own receipts",
+          "as": "PERMISSIVE",
+          "for": "UPDATE",
+          "to": [
+            "authenticated"
+          ],
+          "using": "\"receipts\".\"user_id\" = (select auth.uid())",
+          "withCheck": "\"receipts\".\"user_id\" = (select auth.uid())"
         },
         "users can delete their own receipts": {
           "name": "users can delete their own receipts",
@@ -157,7 +167,7 @@
           "to": [
             "authenticated"
           ],
-          "using": "true"
+          "using": "\"receipts\".\"user_id\" = (select auth.uid())"
         }
       },
       "checkConstraints": {},
