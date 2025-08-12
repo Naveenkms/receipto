@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { redirect } from "next/navigation";
 
-import { addReceipt } from "@/lib/data/reciepts";
+import { addReceipt } from "@/lib/data/receipts";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 

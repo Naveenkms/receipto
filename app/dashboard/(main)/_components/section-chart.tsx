@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { use, useState } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
 import {
@@ -123,46 +123,54 @@ const chartData = [
 ];
 
 const chartConfig = {
-  visitors: {
-    label: "Visitors",
-  },
-  desktop: {
-    label: "Desktop",
-    color: "var(--primary)",
-  },
-  mobile: {
-    label: "Mobile",
+  expenses: {
+    label: "Expenses",
     color: "var(--primary)",
   },
 } satisfies ChartConfig;
 
-function SectionChart() {
+type ChartData =
+  | {
+      data: {
+        date: string;
+        expenses: number;
+      }[];
+      error?: undefined;
+    }
+  | {
+      error: string;
+      data?: undefined;
+    };
+
+function SectionChart({ data }: { data: Promise<ChartData> }) {
+  const { data: chartData } = use(data);
+
+  if (!chartData) return null;
+
   const [timeRange, setTimeRange] = useState("90d");
 
-  const filteredData = chartData.filter((item) => {
-    const date = new Date(item.date);
-    const referenceDate = new Date("2024-06-30");
-    let daysToSubtract = 90;
-    if (timeRange === "30d") {
-      daysToSubtract = 30;
+  const now = new Date();
+  const filteredData = chartData?.filter((item) => {
+    const itemDate = new Date(item.date);
+    const dayDifference =
+      (now.getTime() - itemDate.getTime()) / (1000 * 3600 * 24);
+
+    if (timeRange === "90d") {
+      return dayDifference <= 365;
+    } else if (timeRange === "30d") {
+      return dayDifference <= 30;
     } else if (timeRange === "7d") {
-      daysToSubtract = 7;
+      return dayDifference <= 7;
     }
-    const startDate = new Date(referenceDate);
-    startDate.setDate(startDate.getDate() - daysToSubtract);
-    return date >= startDate;
+    return false;
   });
+
+  console.log("filteredData", filteredData);
 
   return (
     <Card className="@container/card flex-1">
       <CardHeader>
-        <CardTitle>Total Visitors</CardTitle>
-        <CardDescription>
-          <span className="hidden @[540px]/card:block">
-            Total for the last 3 months
-          </span>
-          <span className="@[540px]/card:hidden">Last 3 months</span>
-        </CardDescription>
+        <CardTitle>Total Expenses</CardTitle>
         <CardAction>
           <ToggleGroup
             type="single"
@@ -202,40 +210,35 @@ function SectionChart() {
           config={chartConfig}
           className="aspect-auto min-h-[250px] h-full w-full"
         >
-          <AreaChart data={filteredData}>
+          <AreaChart
+            accessibilityLayer
+            data={filteredData}
+            margin={{
+              left: 12,
+              right: 12,
+            }}
+          >
             <defs>
-              <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
+              <linearGradient id="fillExpenses" x1="0" y1="0" x2="0" y2="1">
                 <stop
                   offset="5%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={1.0}
-                />
-                <stop
-                  offset="95%"
-                  stopColor="var(--color-desktop)"
-                  stopOpacity={0.1}
-                />
-              </linearGradient>
-              <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-                <stop
-                  offset="5%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-expenses)"
                   stopOpacity={0.8}
                 />
                 <stop
                   offset="95%"
-                  stopColor="var(--color-mobile)"
+                  stopColor="var(--color-expenses)"
                   stopOpacity={0.1}
                 />
               </linearGradient>
             </defs>
-            <CartesianGrid vertical={false} />
+            {/* <CartesianGrid vertical={false} /> */}
             <XAxis
               dataKey="date"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              minTickGap={32}
+              // minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
                 return date.toLocaleDateString("en-US", {
@@ -254,23 +257,17 @@ function SectionChart() {
                       day: "numeric",
                     });
                   }}
-                  indicator="dot"
+                  indicator="line"
                 />
               }
             />
             <Area
-              dataKey="mobile"
+              dataKey="expenses"
               type="natural"
-              fill="url(#fillMobile)"
-              stroke="var(--color-mobile)"
               stackId="a"
-            />
-            <Area
-              dataKey="desktop"
-              type="natural"
-              fill="url(#fillDesktop)"
-              stroke="var(--color-desktop)"
-              stackId="a"
+              fill="url(#fillExpenses)"
+              fillOpacity={0.4}
+              stroke="var(--color-expenses)"
             />
           </AreaChart>
         </ChartContainer>

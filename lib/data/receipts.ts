@@ -1,7 +1,7 @@
 import "server-only";
 import { eq } from "drizzle-orm";
 
-import { InsertReceipt, receipts, SelectReceipt } from "../db/schema/receipts";
+import { InsertReceipt, receipts } from "../db/schema/receipts";
 import { db } from "../db";
 import { verifyUser } from "./verify-user";
 
@@ -10,13 +10,9 @@ export const addReceipt = async (data: InsertReceipt) => {
 };
 
 export const getReceipts = async () => {
-  const { data:userData, error } = await verifyUser();
-
-  if (error || !userData?.user) {
-    throw new Error("Unauthorized");
-  }
-
   try {
+    const { data: userData } = await verifyUser();
+
     const data = await db.query.receipts.findMany({
       columns: {
         id: true,

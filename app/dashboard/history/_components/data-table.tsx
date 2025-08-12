@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { getReceipts } from "@/lib/data/reciepts";
+import { getReceipts } from "@/lib/data/receipts";
 
 async function DataTable() {
   const { data, error } = await getReceipts();
@@ -44,7 +44,7 @@ async function DataTable() {
                 <Button variant="destructive">Delete</Button>
               </div>
             </TableCell>
-          </TableRow> 
+          </TableRow>
         ))}
       </TableBody>
     </Table>
