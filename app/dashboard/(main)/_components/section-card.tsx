@@ -30,9 +30,9 @@ async function SectionCard() {
       <FallbackText variant="destructive">Something went wrong.</FallbackText>
     );
 
-    // @ts-ignore
+    // @ts-expect-error: TODO: temporary fix, need to fix
   const { currentYearTotal, currentMonthTotal } = expenses.data;
-  // @ts-ignore
+  // @ts-expect-error: TODO: temporary fix, need to fix
   const { currentYearCount, currentMonthCount } = receipts.data;
 
   return (

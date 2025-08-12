@@ -144,10 +144,10 @@ type ChartData =
 
 function SectionChart({ data }: { data: Promise<ChartData> }) {
   const { data: chartData } = use(data);
+  const [timeRange, setTimeRange] = useState("90d");
 
   if (!chartData) return null;
 
-  const [timeRange, setTimeRange] = useState("90d");
 
   const now = new Date();
   const filteredData = chartData?.filter((item) => {
