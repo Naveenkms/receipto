@@ -1,9 +1,11 @@
 "use client";
-import { cn } from "@/lib/utils";
 import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { HamburgerIcon, X } from "lucide-react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+import { cn } from "@/lib/utils";
 
 interface Links {
   label: string;
@@ -164,11 +166,14 @@ export const SidebarLink = ({
   className?: string;
 }) => {
   const { open, animate } = useSidebar();
+  const pathname = usePathname();
+
   return (
-    <a
+    <Link
       href={link.href}
       className={cn(
         "flex items-center justify-start gap-2  group/sidebar py-2",
+        pathname === link.href ? "[&>svg]:text-primary " : "",
         className
       )}
       {...props}
@@ -180,24 +185,30 @@ export const SidebarLink = ({
           display: animate ? (open ? "inline-block" : "none") : "inline-block",
           opacity: animate ? (open ? 1 : 0) : 1,
         }}
-        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+        className={cn(
+          "text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0",
+          pathname === link.href ? "text-primary font-semibold" : ""
+        )}
       >
         {link.label}
       </motion.span>
-    </a>
+    </Link>
   );
 };
 
 export const SidebarLogo = ({ className }: { className?: string }) => {
-  const { open } = useSidebar();
+  const { open, animate } = useSidebar();
   return (
     <Link
       href="#"
       className="relative z-20 flex items-center py-1 text-2xl font-bold whitespace-pre text-black dark:text-white"
     >
       R
-      {open ? (
-        <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      {open || !animate ? (
+        <motion.span
+          initial={{ opacity: animate ? 0 : 1 }}
+          animate={{ opacity: 1 }}
+        >
           eciepto
         </motion.span>
       ) : null}
