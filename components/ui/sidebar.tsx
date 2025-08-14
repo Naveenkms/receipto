@@ -1,16 +1,20 @@
 "use client";
-import React, { useState, createContext, useContext } from "react";
+import React, { useState, createContext, useContext, Component } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { HamburgerIcon, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@/lib/utils";
 
+type Label = string;
+type Icon = React.JSX.Element | React.ReactNode;
+
 interface Links {
-  label: string;
+  label: Label;
   href: string;
-  icon: React.JSX.Element | React.ReactNode;
+  icon: Icon;
 }
 
 interface SidebarContextProps {
@@ -157,41 +161,80 @@ export const MobileSidebar = ({
   );
 };
 
+const AnimateTextOnSidebarOpen = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  const { open, animate } = useSidebar();
+
+  return (
+    <motion.span
+      animate={{
+        display: animate ? (open ? "inline-block" : "none") : "inline-block",
+        opacity: animate ? (open ? 1 : 0) : 1,
+      }}
+      className={className}
+    >
+      {children}
+    </motion.span>
+  );
+};
+
+const sidebarButtonClasses =
+  "flex items-center justify-start gap-2  group/sidebar py-2 cursor-pointer";
+const sidebarButtonTextClasses =
+  "text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0";
+
+export const SidebarButton = ({
+  className,
+  content,
+  onClick,
+}: {
+  className?: string;
+  content: { label: Label; icon: Icon };
+  onClick?: React.ComponentProps<"button">["onClick"];
+}) => {
+  return (
+    <button onClick={onClick} className={cn(sidebarButtonClasses, className)}>
+      {content.icon}
+      <AnimateTextOnSidebarOpen className={sidebarButtonTextClasses}>
+        {content.label}
+      </AnimateTextOnSidebarOpen>
+    </button>
+  );
+};
+
 export const SidebarLink = ({
   link,
   className,
-  ...props
 }: {
   link: Links;
   className?: string;
 }) => {
-  const { open, animate } = useSidebar();
   const pathname = usePathname();
 
   return (
     <Link
       href={link.href}
       className={cn(
-        "flex items-center justify-start gap-2  group/sidebar py-2",
+        sidebarButtonClasses,
         pathname === link.href ? "[&>svg]:text-primary " : "",
         className
       )}
-      {...props}
     >
       {link.icon}
 
-      <motion.span
-        animate={{
-          display: animate ? (open ? "inline-block" : "none") : "inline-block",
-          opacity: animate ? (open ? 1 : 0) : 1,
-        }}
+      <AnimateTextOnSidebarOpen
         className={cn(
-          "text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0",
+          sidebarButtonTextClasses,
           pathname === link.href ? "text-primary font-semibold" : ""
         )}
       >
         {link.label}
-      </motion.span>
+      </AnimateTextOnSidebarOpen>
     </Link>
   );
 };

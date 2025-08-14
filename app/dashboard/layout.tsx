@@ -1,11 +1,4 @@
-import {
-  ArrowBigDown,
-  ArrowLeft,
-  FileClock,
-  LayoutDashboard,
-  Upload,
-  UserIcon,
-} from "lucide-react";
+import { FileClock, LayoutDashboard, Upload, UserIcon } from "lucide-react";
 
 import {
   Sidebar,
@@ -15,6 +8,7 @@ import {
 } from "@/components/ui/sidebar";
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
+import LogoutButton from "./_components/logout-button";
 
 const links = [
   {
@@ -36,13 +30,6 @@ const links = [
     href: "/dashboard/history",
     icon: (
       <FileClock className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-    ),
-  },
-  {
-    label: "Logout",
-    href: "#",
-    icon: (
-      <ArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
     ),
   },
 ];
@@ -69,6 +56,7 @@ export default async function DashboardLayout({
               {links.map((link, idx) => (
                 <SidebarLink key={idx} link={link} />
               ))}
+              <LogoutButton />
             </div>
           </div>
           <div>
