@@ -1,5 +1,5 @@
 import "server-only";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 
 import { InsertReceipt, receipts } from "../db/schema/receipts";
 import { db } from "../db";
@@ -28,3 +28,5 @@ export const getReceipts = async () => {
     return { error: "Failed to get receipts" };
   }
 };
+
+

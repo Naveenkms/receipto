@@ -1,5 +1,4 @@
 import FallbackText from "@/components/fallback-text";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -10,8 +9,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { getReceipts } from "@/lib/data/receipts";
+import Delete from "./delete";
 
 async function DataTable() {
+  await new Promise((resolve) => setTimeout(resolve, 5000));
   const { data, error } = await getReceipts();
 
   if (error)
@@ -41,7 +42,7 @@ async function DataTable() {
             <TableCell className="break-all whitespace-normal">
               <div className="flex gap-x-2 items-center justify-between">
                 <p>{receipt.total || "-"}</p>
-                <Button variant="destructive">Delete</Button>
+                <Delete id={receipt.id} />
               </div>
             </TableCell>
           </TableRow>

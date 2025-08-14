@@ -9,6 +9,8 @@ import {
 } from "@/components/ui/card";
 import { getTotalExpenses, getTotalReceiptsCount } from "@/lib/data/dashboard";
 import FallbackText from "@/components/fallback-text";
+import SectionCardSkeleton from "./section-card-skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const formatToCurrency = (number: number) => {
   return new Intl.NumberFormat("en-IN", {
@@ -30,14 +32,14 @@ async function SectionCard() {
       <FallbackText variant="destructive">Something went wrong.</FallbackText>
     );
 
-    // @ts-expect-error: TODO: temporary fix, need to fix
+  // @ts-expect-error: TODO: temporary fix, need to fix
   const { currentYearTotal, currentMonthTotal } = expenses.data;
   // @ts-expect-error: TODO: temporary fix, need to fix
   const { currentYearCount, currentMonthCount } = receipts.data;
 
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card *:data-[slot=card]:bg-gradient-to-t gap-4  grid grid-cols-1 md:grid-cols-2">
-      <Card className="">
+      <Card className="@container/card">
         <CardHeader>
           <CardDescription> Total expenses in this year</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">

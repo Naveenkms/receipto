@@ -4,18 +4,20 @@ import PageHeader from "@/components/page-header";
 import SectionCard from "./_components/section-card";
 import SectionChart from "./_components/section-chart";
 import { getYearlyExpensesForChart } from "@/lib/data/dashboard";
+import SectionCardSkeleton from "./_components/section-card-skeleton";
+import SectionChartSkeleton from "./_components/section-chart-skeleton";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   const chartData = getYearlyExpensesForChart();
 
   return (
     <div className="w-full flex flex-col">
       <PageHeader>Dashboard</PageHeader>
       <div className="py-4 px-4 md:px-6 flex-1 flex flex-col gap-4 overflow-auto">
-        <Suspense fallback={<div>Loading table...</div>}>
+        <Suspense fallback={<SectionCardSkeleton />}>
           <SectionCard />
         </Suspense>
-        <Suspense fallback={<div>Loading chart...</div>}>
+        <Suspense fallback={<SectionChartSkeleton />}>
           <SectionChart data={chartData} />
         </Suspense>
       </div>
