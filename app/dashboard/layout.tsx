@@ -9,6 +9,7 @@ import {
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import LogoutButton from "./_components/logout-button";
+import { DarkModeToggle } from "@/components/dark-mode-toggle";
 
 const links = [
   {
@@ -59,7 +60,7 @@ export default async function DashboardLayout({
               <LogoutButton />
             </div>
           </div>
-          <div>
+          <div className="flex gap-x-2 justify-between items-center">
             <SidebarLink
               link={{
                 label: data.user.email || "User",
@@ -69,6 +70,7 @@ export default async function DashboardLayout({
                 ),
               }}
             />
+            <DarkModeToggle />
           </div>
         </SidebarBody>
       </Sidebar>
