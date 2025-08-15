@@ -14,7 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
 import { schema, Schema } from "../schema";
 import { login } from "./actions";
 import {
@@ -25,6 +25,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { toast } from "sonner";
 export function LoginForm({
   className,
   ...props
@@ -34,14 +35,22 @@ export function LoginForm({
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: "demo@yourapp.com ",
+      password: "DemoPassword123!",
     },
   });
 
   const onSubmit = async (data: Schema) => {
     startTransition(() => action(data));
   };
+
+  useEffect(() => {
+    if ((process.env.NEXT_PUBLIC_APP_TYPE = "demo")) {
+      toast.info(
+        "This is a demo app. You can try it with the default credentials to login"
+      );
+    }
+  }, []);
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
