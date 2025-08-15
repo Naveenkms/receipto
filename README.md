@@ -4,6 +4,13 @@ Receipto is a web application that helps users track and manage their expenses b
 
 ---
 
+## 📸 Screenshots
+
+![App Screenshot](https://raw.githubusercontent.com/Naveenkms/my-portfolio/refs/heads/main/assets/project-img/Screenshot%202025-08-15%20201216.png)
+
+---
+
+
 ## 🚀 Features
 
 - 📤 **Receipt Upload & Parsing**  
