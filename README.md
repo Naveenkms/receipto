@@ -31,9 +31,6 @@ Receipto is a web application that helps users track and manage their expenses b
 - 🌙 **Dark Mode Support**  
   UI adapts to dark mode with optimized styling.
 
-- 🔤 **Font Optimization**  
-  Uses `next/font` to load and optimize the **Geist** font family.
-
 ---
 
 ## 🛠️ Tech Stack
