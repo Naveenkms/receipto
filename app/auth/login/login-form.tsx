@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { toast } from "sonner";
+
+const APP_TYPE = process.env.NEXT_PUBLIC_APP_TYPE;
+
 export function LoginForm({
   className,
   ...props
@@ -45,7 +48,7 @@ export function LoginForm({
   };
 
   useEffect(() => {
-    if ((process.env.NEXT_PUBLIC_APP_TYPE = "demo")) {
+    if (APP_TYPE === "demo") {
       toast.info(
         "This is a demo app. You can try it with the default credentials to login"
       );
