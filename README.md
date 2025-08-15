@@ -1,36 +1,60 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🧾 Receipto
 
-## Getting Started
+Receipto is a modern web application that helps users track and manage their expenses by parsing receipt data—without storing the original image files. Built with cutting-edge technologies like **Next.js App Router**, **Supabase**, and **LlamaCloud**, it showcases a clean UI, smart data handling, and a strong grasp of server components and modern React patterns.
 
-First, run the development server:
+---
+
+## 🚀 Features
+
+- 📤 **Receipt Upload & Parsing**  
+  Users upload receipt images, which are parsed using **LlamaCloud OCR**. Only the extracted data is stored—images are never saved.
+
+- 📊 **Dashboard Overview**  
+  Displays total expenses and key metrics. Includes an interactive area chart showing expenses over time, filterable by:
+  - Last 7 days
+  - Last 1 month
+  - Last 1 year
+
+- 📁 **History Page**  
+  View all parsed receipts in a table format. Users can delete entries (data only, no file deletion needed).
+
+- 🔐 **Authentication via Supabase**  
+  Secure login/logout flow using Supabase Auth. Demo credentials available for testing.
+
+- 🌙 **Dark Mode Support**  
+  UI adapts to dark mode with optimized styling.
+
+- 🔤 **Font Optimization**  
+  Uses `next/font` to load and optimize the **Geist** font family.
+
+---
+
+## 🛠️ Tech Stack
+
+| Technology     | Role                                      |
+|----------------|-------------------------------------------|
+| Next.js        | Frontend framework with App Router        |
+| TypeScript     | Type-safe development                     |
+| Supabase       | Auth & database                           |
+| LlamaCloud     | OCR receipt parsing                       |
+| Drizzle ORM    | Schema and database management            |
+| Vercel         | Deployment platform                       |
+
+---
+
+## 📦 Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Clone the repo
+git clone https://github.com/Naveenkms/receipto.git
+cd receipto
+
+# Install dependencies
+pnpm install
+
+# Set up environment variables
+cp .env.example .env.local
+# Add your Supabase keys and LlamaCloud API credentials
+
+# Run the development server
 pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
