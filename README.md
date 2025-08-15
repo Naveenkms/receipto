@@ -44,5 +44,3 @@ Receipto is a web application that helps users track and manage their expenses b
 ---
     
 
-# Run the development server
-pnpm dev
