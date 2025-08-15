@@ -1,9 +1,9 @@
 "use client";
 import { ArrowLeft } from "lucide-react";
-import { useActionState, useState } from "react";
+import { ComponentProps, useActionState, useState } from "react";
 import { redirect } from "next/navigation";
 
-import { SidebarButton } from "@/components/ui/sidebar";
+import { SidebarButton, useSidebar } from "@/components/ui/sidebar";
 import { logout } from "../actions";
 import {
   AlertDialog,
@@ -17,9 +17,25 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 
-function LogoutButton() {
-  const [open, setOpen] = useState(false);
+function LogoutAlertTrigger({ onClick }: { onClick: () => void }) {
+  const { setOpen } = useSidebar();
+  return (
+    <SidebarButton
+      onClick={() => {
+        setOpen(false);
+        onClick();
+      }}
+      content={{
+        label: "Logout",
+        icon: (
+          <ArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
+        ),
+      }}
+    />
+  );
+}
 
+function LogoutAlertDialog(props: ComponentProps<typeof AlertDialog>) {
   const [state, action, pending] = useActionState(logout, null);
 
   if (state?.error) {
@@ -27,19 +43,7 @@ function LogoutButton() {
   }
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <SidebarButton
-        onClick={() => {
-          console.log("logout");
-          setOpen(true);
-        }}
-        content={{
-          label: "Logout",
-          icon: (
-            <ArrowLeft className="h-5 w-5 shrink-0 text-neutral-700 dark:text-neutral-200" />
-          ),
-        }}
-      />
+    <AlertDialog {...props}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Confirm logout</AlertDialogTitle>
@@ -51,7 +55,12 @@ function LogoutButton() {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <form action={action}>
-            <Button variant="destructive" disabled={pending}>
+            <Button
+              variant="destructive"
+              disabled={pending}
+              type="submit"
+              className="w-full"
+            >
               Confirm
             </Button>
           </form>
@@ -61,4 +70,4 @@ function LogoutButton() {
   );
 }
 
-export default LogoutButton;
+export { LogoutAlertTrigger, LogoutAlertDialog };

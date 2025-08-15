@@ -1,10 +1,9 @@
 "use client";
 import React, { useState, createContext, useContext, Component } from "react";
 import { AnimatePresence, motion } from "motion/react";
-import { HamburgerIcon, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@/lib/utils";
 
@@ -126,7 +125,7 @@ export const MobileSidebar = ({
         {...props}
       >
         <div className="flex justify-end z-20 w-full">
-          <HamburgerIcon
+          <Menu
             className="text-neutral-800 dark:text-neutral-200"
             onClick={() => setOpen(!open)}
           />
@@ -215,27 +214,52 @@ export const SidebarLink = ({
   className?: string;
 }) => {
   const pathname = usePathname();
+  const { open, setOpen } = useSidebar();
 
   return (
-    <Link
-      href={link.href}
-      className={cn(
-        sidebarButtonClasses,
-        pathname === link.href ? "[&>svg]:text-primary " : "",
-        className
-      )}
-    >
-      {link.icon}
-
-      <AnimateTextOnSidebarOpen
+    <>
+      <Link
+        href={link.href}
         className={cn(
-          sidebarButtonTextClasses,
-          pathname === link.href ? "text-primary font-semibold" : ""
+          sidebarButtonClasses,
+          pathname === link.href ? "[&>svg]:text-primary " : "",
+          "hidden md:flex",
+          className
         )}
       >
-        {link.label}
-      </AnimateTextOnSidebarOpen>
-    </Link>
+        {link.icon}
+
+        <AnimateTextOnSidebarOpen
+          className={cn(
+            sidebarButtonTextClasses,
+            pathname === link.href ? "text-primary font-semibold" : ""
+          )}
+        >
+          {link.label}
+        </AnimateTextOnSidebarOpen>
+      </Link>
+      <Link
+        onClick={() => setOpen(!open)}
+        href={link.href}
+        className={cn(
+          sidebarButtonClasses,
+          pathname === link.href ? "[&>svg]:text-primary " : "",
+          "md:hidden",
+          className
+        )}
+      >
+        {link.icon}
+
+        <AnimateTextOnSidebarOpen
+          className={cn(
+            sidebarButtonTextClasses,
+            pathname === link.href ? "text-primary font-semibold" : ""
+          )}
+        >
+          {link.label}
+        </AnimateTextOnSidebarOpen>
+      </Link>
+    </>
   );
 };
 

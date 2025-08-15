@@ -27,8 +27,8 @@ async function DataTable() {
       <TableCaption>A list of your receipts.</TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Receipt Id</TableHead>
-          <TableHead className="w-1/2">Date</TableHead>
+          <TableHead className="md:w-[100px]">Receipt Id</TableHead>
+          <TableHead className="md:w-1/2">Date</TableHead>
           <TableHead>Total</TableHead>
         </TableRow>
       </TableHeader>
