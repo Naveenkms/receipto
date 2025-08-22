@@ -7,7 +7,7 @@ Receipto is a web application that helps users track and manage their expenses b
 ## 📸 Screenshots
 
 ![App Screenshot](https://raw.githubusercontent.com/Naveenkms/my-portfolio/refs/heads/main/assets/project-img/Screenshot%202025-08-15%20201216.png)
-![App Screenshot]([https://raw.githubusercontent.com/Naveenkms/my-portfolio/refs/heads/main/assets/project-img/Screenshot%202025-08-15%20201216.png](https://github.com/Naveenkms/my-portfolio/blob/main/assets/project-img/Screenshot%202025-08-22%20130501.png?raw=true))
+![App Screenshot](https://github.com/Naveenkms/my-portfolio/blob/main/assets/project-img/Screenshot%202025-08-22%20130501.png?raw=true)
 ![App Screenshot](https://raw.githubusercontent.com/Naveenkms/my-portfolio/refs/heads/main/assets/project-img/Screenshot%202025-08-15%20201216.png)
 ![App Screenshot](https://raw.githubusercontent.com/Naveenkms/my-portfolio/refs/heads/main/assets/project-img/Screenshot%202025-08-15%20201216.png)
 ---
