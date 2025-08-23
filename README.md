@@ -15,8 +15,6 @@ Receipto is a web application that helps users track and manage their expenses b
 
 ## 🚀 Features
 
-### ✅ Feature Implementation Overview
-
 | Feature                          | Status        | Notes                                                                 |
 |----------------------------------|---------------|-----------------------------------------------------------------------|
 | Receipt Upload & Parsing         | ✅ Implemented | Parses images via LlamaCloud with reliable extraction                 |
