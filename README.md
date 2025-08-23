@@ -15,23 +15,22 @@ Receipto is a web application that helps users track and manage their expenses b
 
 ## 🚀 Features
 
-- 📤 **Receipt Upload & Parsing**  
-  Users upload receipt images, which are parsed using **LlamaCloud Extraction**. 
+### ✅ Feature Implementation Overview
 
-- 📊 **Dashboard Overview**  
-  Displays total expenses and key metrics. Includes an interactive area chart showing expenses over time, filterable by:
-  - Last 7 days
-  - Last 1 month
-  - Last 1 year
+| Feature                          | Status        | Notes                                                                 |
+|----------------------------------|---------------|-----------------------------------------------------------------------|
+| Authentication         | ✅ Implemented | Parses images via LlamaCloud with reliable extraction                 |
+| Receipt Upload & Parsing         | ✅ Implemented | Parses images via LlamaCloud with reliable extraction                 |
+| Dashboard Overview               | ✅ Implemented | Interactive chart, filters by time range                             |
+| History Page                     | ✅ Implemented | Table view with delete functionality                                 |
+| Authentication (Supabase)       | ✅ Implemented | Secure login/logout with demo credentials                            |
+| Dark Mode Support                | ✅ Implemented | Responsive styling for light/dark themes                             |
+| Receipt Editing                  | ❌ Not Yet     | Currently no edit functionality for parsed receipts                  |
+| Expense Categorization           | ❌ Not Yet     | No automatic or manual tagging of expense categories                 |
+| Export to CSV/PDF                | ❌ Not Yet     | Users cannot export receipt data yet                                 |
+| Mobile Responsiveness            | ✅ Implemented | Optimized layout across devices                                      |
+| Unit Testing (Vitest)           | ⚠️ Partial     | SidebarLink tested; more coverage needed                             |
 
-- 📁 **History Page**  
-  View all parsed receipts in a table format. Users can delete entries.
-
-- 🔐 **Authentication via Supabase**  
-  Secure login/logout flow using Supabase Auth. Demo credentials available for testing.
-
-- 🌙 **Dark Mode Support**  
-  UI adapts to dark mode with optimized styling.
 
 ---
 
