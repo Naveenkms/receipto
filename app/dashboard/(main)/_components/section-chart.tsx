@@ -97,7 +97,7 @@ function SectionChart({ data }: { data: Promise<ChartData> }) {
               <SelectValue placeholder="Last 12 months" />
             </SelectTrigger>
             <SelectContent className="rounded-xl">
-              <SelectItem value="90d" className="rounded-lg">
+              <SelectItem value="365d" className="rounded-lg">
                 Last 12 months
               </SelectItem>
               <SelectItem value="30d" className="rounded-lg">
@@ -137,7 +137,6 @@ function SectionChart({ data }: { data: Promise<ChartData> }) {
                 />
               </linearGradient>
             </defs>
-            {/* <CartesianGrid vertical={false} /> */}
             <XAxis
               dataKey="date"
               tickLine={false}
