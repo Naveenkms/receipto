@@ -20,7 +20,6 @@ export const getTotalExpenses = async () => {
   const { data: userData } = await verifyUser();
 
   try {
-    // Query for current year expenses
     const yearExpensesResult = await db
       .select({
         totalExpenses: sql<string>`COALESCE(SUM(${receipts.total}), 0)`,
@@ -34,7 +33,6 @@ export const getTotalExpenses = async () => {
         )
       );
 
-    // Query for current month expenses
     const monthExpensesResult = await db
       .select({
         totalExpenses: sql<string>`COALESCE(SUM(${receipts.total}), 0)`,

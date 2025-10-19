@@ -9,8 +9,6 @@ import {
 } from "@/components/ui/card";
 import { getTotalExpenses, getTotalReceiptsCount } from "@/lib/data/dashboard";
 import FallbackText from "@/components/fallback-text";
-import SectionCardSkeleton from "./section-card-skeleton";
-import { Skeleton } from "@/components/ui/skeleton";
 
 const formatToCurrency = (number: number) => {
   return new Intl.NumberFormat("en-IN", {
