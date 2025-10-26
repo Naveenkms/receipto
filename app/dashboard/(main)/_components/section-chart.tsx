@@ -80,6 +80,7 @@ function SectionChart({ data }: { data: Promise<ChartData> }) {
             onValueChange={(value: TimeRange) => setTimeRange(value)}
             variant="outline"
             className="hidden *:data-[slot=toggle-group-item]:!px-4 @[767px]/card:flex"
+            aria-label="filter total expenses by days"
           >
             <ToggleGroupItem value="365d">Last 12 months</ToggleGroupItem>
             <ToggleGroupItem value="30d">Last 30 days</ToggleGroupItem>

@@ -1,4 +1,3 @@
-
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 
@@ -19,7 +18,7 @@ export default async function DashboardLayout({
   return (
     <div className="flex flex-col md:flex-row h-screen">
       <DashboardSidebar />
-      {children}
+      <main id="content" tabIndex={-1} className="w-full">{children}</main>
     </div>
   );
 }

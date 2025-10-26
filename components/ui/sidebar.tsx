@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, createContext, useContext, Component } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
@@ -79,7 +79,7 @@ export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
   return (
     <>
       <DesktopSidebar {...props} />
-      <MobileSidebar {...(props as React.ComponentProps<"div">)} />
+      <MobileSidebar {...(props as React.ComponentProps<"aside">)} />
     </>
   );
 };
@@ -88,11 +88,11 @@ export const DesktopSidebar = ({
   className,
   children,
   ...props
-}: React.ComponentProps<typeof motion.div>) => {
+}: React.ComponentProps<typeof motion.aside>) => {
   const { open, setOpen, animate } = useSidebar();
   return (
     <>
-      <motion.div
+      <motion.aside
         className={cn(
           "h-full px-4 py-4 hidden  md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] shrink-0",
           className
@@ -105,7 +105,7 @@ export const DesktopSidebar = ({
         {...props}
       >
         {children}
-      </motion.div>
+      </motion.aside>
     </>
   );
 };
@@ -114,11 +114,10 @@ export const MobileSidebar = ({
   className,
   children,
   ...props
-}: React.ComponentProps<"div">) => {
+}: React.ComponentProps<"aside">) => {
   const { open, setOpen } = useSidebar();
   return (
-    <>
-      <div
+      <aside
         className={cn(
           "h-10 px-4 py-4 flex flex-row md:hidden  items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
         )}
@@ -155,8 +154,7 @@ export const MobileSidebar = ({
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-    </>
+      </aside>
   );
 };
 
@@ -267,8 +265,9 @@ export const SidebarLogo = ({ className }: { className?: string }) => {
   const { open, animate } = useSidebar();
   return (
     <Link
-      href="#"
+      href="/dashboard"
       className="relative z-20 flex items-center py-1 text-2xl font-bold whitespace-pre text-black dark:text-white"
+      aria-label="receipto"
     >
       R
       {open || !animate ? (

@@ -11,16 +11,16 @@ export default async function DashboardPage() {
   const chartData = getYearlyExpensesForChart();
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col h-screen">
       <PageHeader>Dashboard</PageHeader>
-      <div className="py-4 px-4 md:px-6 flex-1 flex flex-col gap-4 overflow-auto">
+      <section aria-label="analytics" className="py-4 px-4 md:px-6 flex-1 flex flex-col gap-4 overflow-auto">
         <Suspense fallback={<SectionCardSkeleton />}>
           <SectionCard />
         </Suspense>
         <Suspense fallback={<SectionChartSkeleton />}>
           <SectionChart data={chartData} />
         </Suspense>
-      </div>
+      </section>
     </div>
   );
 }
