@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 
 import { addReceipt } from "@/lib/data/receipts";
 import { createClient } from "@/lib/supabase/server";
-import { revalidatePath } from "next/cache";
 
 const LLAMA_CLOUD_API_URL = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL;
 const LLAMA_CLOUD_API_KEY = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_KEY;
