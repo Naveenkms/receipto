@@ -7,7 +7,6 @@ export const uploadReciept = async (
   initialState: any,
   values: z.infer<typeof schema>
 ) => {
-  console.log("ser act", values);
   const validatedFields = schema.safeParse(values);
 
   if (!validatedFields.success) {

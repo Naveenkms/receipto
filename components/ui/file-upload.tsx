@@ -1092,7 +1092,7 @@ function FileUploadItemPreview(props: FileUploadItemPreviewProps) {
         }
 
         return (
-          <Image src={url} alt={file.name} className="size-full object-cover" />
+          <Image src={url} alt={file.name} width={100} height={100} className="size-full object-cover" />
         );
       }
 
