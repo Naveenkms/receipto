@@ -1,44 +1,5 @@
-//     // const result = await response.json();
-//     // console.log(result);
-// // Make a fetch call to create an extraction job
-// // const extractionAgentId = process.env.NEXT_PUBLIC_LLAMA_CLOUD_AGENT_ID;
-// // const fileId = "8d850108-f506-45e4-81c1-c1b7d1f7aa3e";
+"use server"
 
-import { createClient } from "../../../lib/supabase/client";
-
-// // const extractionResponse = await fetch(
-// //   "https://api.cloud.llamaindex.ai/api/v1/extraction/jobs",
-// //   {
-// //   method: "POST",
-// //   headers: {
-// //     Authorization: `Bearer ${apiKey}`,
-// //     accept: "application/json",
-// //     "Content-Type": "application/json",
-// //   },
-// //   body: JSON.stringify({
-// //     extraction_agent_id: extractionAgentId,
-// //     file_id: fileId,
-// //   }),
-// //   }
-// // );
-// // const extractionResult = await extractionResponse.json();
-// // console.log(extractionResult);
-
-// // Fetch extraction job result
-// // Replace {$JOB_ID} with your actual job ID
-// const jobId = "ec5efc08-0b0c-4c1f-8c78-e2c9564cb2f5";
-// const resultResponse = await fetch(
-//   `https://api.cloud.llamaindex.ai/api/v1/extraction/jobs/${jobId}/result`,
-//   {
-//     method: "GET",
-//     headers: {
-//       accept: "application/json",
-//       Authorization: `Bearer ${apiKey}`,
-//     },
-//   }
-// );
-// const resultData = await resultResponse.json();
-// console.log(resultData);
 export type Response = {
   id: string;
   created_at: string;
