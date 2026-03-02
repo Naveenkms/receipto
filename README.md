@@ -43,7 +43,7 @@ Receipto is a web application that helps users track and manage their expenses b
 | PostgreSQL     | Relational database                       |
 | Drizzle ORM    | Database schema & migrations              |
 | Vercel         | Deployment platform                       |
-
+| Recharts       | Data visualization                        |
 ---
     
 
