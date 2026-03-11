@@ -1,8 +1,12 @@
 import { type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
+import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
   // update user's auth session
+  if (request.nextUrl.pathname === "/api/test") {
+    return NextResponse.next();
+  }
   return await updateSession(request);
 }
 
