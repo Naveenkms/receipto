@@ -1,7 +1,9 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-  console.log("request!!!!!!!!!!!", request);
 
-//   const { jobId, userId } = await request.json();
+  const res = await request.json();
+  console.log("log: ", res);
+
+  return NextResponse.json({ message: "success", data: res });
 }
