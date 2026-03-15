@@ -1,8 +1,14 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { updateSession } from "./lib/supabase/middleware";
 import { NextResponse } from "next/server";
 
 export async function middleware(request: NextRequest) {
+  // skip api/receipts route
+  // - to avail calling the api from the worker server, 
+  //   since we are not handling authentication there.
+  if (request.nextUrl.pathname === "/api/receipts") {
+    return NextResponse.next();
+  }
   // update user's auth session
   if (request.nextUrl.pathname === "/api/test") {
     return NextResponse.next();

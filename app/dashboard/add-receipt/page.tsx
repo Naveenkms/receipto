@@ -26,7 +26,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { maxSize, schema } from "./schema";
-import { uploadReceipt } from "./services";
+import { uploadReceiptToStorage } from "./services";
 
 const maxFiles = 1;
 
@@ -37,25 +37,26 @@ export default function AddReceiptPage() {
     resolver: zodResolver(schema),
   });
 
-  const onsubmit = async (data: z.infer<typeof schema>) => {
+  const onsubmit = async ({ file }: z.infer<typeof schema>) => {
     setIsPending(true);
     try {
-      const uploadRes = await uploadReceipt(data.file);
-      if (!uploadRes) {
-        throw new Error("Failed to add receipt");
+      const { data, error } = await uploadReceiptToStorage(file);
+      if (error) {
+        throw error;
       }
+
       const res = await fetch("/api/receipts/extract", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          fileId: uploadRes.id,
+          filePath: data.path,
         }),
       });
 
       toast.success("Receipt added successfully");
-      console.log("Receipt added successfully:", res);
+      // console.log("Receipt added successfully:", data);
     } catch (error) {
       toast.error("Failed to add receipt");
       console.error("Error adding receipt:", error);

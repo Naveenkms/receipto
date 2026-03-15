@@ -1,52 +1,76 @@
 import { NextRequest } from "next/server";
 import { redirect } from "next/navigation";
+import { Queue } from "bullmq";
+import { Redis } from "ioredis";
 
 import { addReceipt } from "@/lib/data/receipts";
 import { createClient } from "@/lib/supabase/server";
+import { urlToFile } from "@/lib/utils";
+import { createExtractionJob, uploadFileToExtractionAgent } from "./service";
 
 const LLAMA_CLOUD_API_URL = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL;
+const LLAMA_CLOUD_API_URL_V2 = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL_V2;
 const LLAMA_CLOUD_API_KEY = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_KEY;
 const AGENT_ID = process.env.NEXT_PUBLIC_LLAMA_CLOUD_AGENT_ID;
 
+const connection = new Redis(process.env.REDIS_URL!, {
+  maxRetriesPerRequest: null,
+});
+
+const checkExtractionResultQueue = new Queue("check-for-extraction-result", {
+  connection,
+});
+
 export async function POST(request: NextRequest) {
-  const supabase = await createClient();
+  try {
+    const supabase = await createClient();
 
-  const { data, error } = await supabase.auth.getUser();
+    const { data, error } = await supabase.auth.getUser();
 
-  if (error || !data?.user) {
-    redirect("/auth/login");
-  }
+    if (error || !data?.user) {
+      redirect("/auth/login");
+    }
 
-  const { fileId } = await request.json();
+    const { filePath } = await request.json();
 
-  // run extraction job
-  const response = await fetch(`${LLAMA_CLOUD_API_URL}/extraction/jobs`, {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${LLAMA_CLOUD_API_KEY}`,
-    },
-    body: JSON.stringify({
-      extraction_agent_id: AGENT_ID,
-      file_id: fileId,
-    }),
-  });
+    const {
+      data: { publicUrl },
+    } = supabase.storage.from("reciepts").getPublicUrl(filePath);
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error("Error creating extraction job:", errorData);
+    if (!publicUrl) {
+      throw new Error("Failed to get public url");
+    }
+
+    const file = await urlToFile(publicUrl);
+
+    const { id } = await uploadFileToExtractionAgent(file);
+
+    const response = await createExtractionJob(id, data.user.id);
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Error creating extraction job:", errorData);
+      throw new Error(errorData.error);
+    }
+
+    const receipt: { id: string } = await response.json();
+    console.log("receipt", receipt);
+
+    // we are not awaiting for the extraction job to complete here. This is intentional.
+    // handleExtractionResult(receipt.id, data.user.id);
+
+    // await checkExtractionResultQueue.add(`extraction-id-${receipt.id}`, {
+    //   extractionJobId: receipt.id,
+    //   userId: data.user.id,
+    // });
+
+    return new Response(JSON.stringify(receipt), { status: 201 });
+  } catch (error) {
+    console.error(error);
     return new Response(JSON.stringify({ error: "Failed to create job" }), {
-      status: response.status,
+      status: 500,
     });
   }
-
-  const receipt: { id: string } = await response.json();
-
-  // we are not awaiting for the extraction job to complete here. This is intentional.
-  handleExtractionResult(receipt.id, data.user.id);
-
-  return new Response(JSON.stringify(receipt), { status: 201 });
 }
 
 type STATUS = "PENDING" | "SUCCESS" | "ERROR" | "PARTIAL_SUCCESS" | "CANCELLED";
@@ -67,7 +91,7 @@ const pollForExtractionStatus = async (jobId: string) => {
           accept: "application/json",
           Authorization: `Bearer ${LLAMA_CLOUD_API_KEY}`,
         },
-      }
+      },
     );
 
     if (!response.ok) {
@@ -123,7 +147,7 @@ type ExtractionResult = {
 };
 
 const getExtractionResult = async (
-  jobId: string
+  jobId: string,
 ): Promise<ExtractionResult> => {
   const response = await fetch(
     `${LLAMA_CLOUD_API_URL}/extraction/jobs/${jobId}/result`,
@@ -133,7 +157,7 @@ const getExtractionResult = async (
         accept: "application/json",
         Authorization: `Bearer ${LLAMA_CLOUD_API_KEY}`,
       },
-    }
+    },
   );
 
   if (!response.ok) {
