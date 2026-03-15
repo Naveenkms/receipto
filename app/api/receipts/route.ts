@@ -51,9 +51,20 @@ export async function POST(request: NextRequest) {
   //   if (error || !userData) {
   //     redirect("/auth/login");
   //   }
-  console.log("request!!!!!!!!!!!", request);
+  // console.log("request!!!!!!!!!!!", request);
 
-  const { jobId, userId } = await request.json();
+  const {
+    data: { job_id: jobId },
+  } = await request.json();
+
+  const userId = request.headers.get("userId");
+
+  if (!userId) {
+    return NextResponse.json(
+      { message: "User ID is required" },
+      { status: 400 },
+    );
+  }
 
   const response = await fetch(
     `${LLAMA_CLOUD_API_URL}/extraction/jobs/${jobId}/result`,
@@ -72,7 +83,8 @@ export async function POST(request: NextRequest) {
   }
 
   const { data } = (await response.json()) as ExtractionResult;
-  const result = await addReceipt({
+  
+  await addReceipt({
     userId: userId,
     total: data?.total.toString(),
     storeName: data?.storeName,
