@@ -38,10 +38,10 @@ export const uploadFileToExtractionAgent = async (
 };
 
 export const createExtractionJob = async (id: string, userId: string) => {
-  const host = process.env.VERCEL_URL;
+  const host = process.env.VERCEL_PROJECT_PRODUCTION_URL;
 
   if (!host) {
-    throw new Error("VERCEL_URL is not defined");
+    throw new Error("VERCEL_PROJECT_PRODUCTION_URL is not defined");
   }
 
   const deploymentUrl = `https://${host}`;
@@ -64,7 +64,7 @@ export const createExtractionJob = async (id: string, userId: string) => {
             "extract.success",
             "extract.error",
           ],
-          webhook_url: `https://receipto-azure.vercel.app/api/receipts`,
+          webhook_url: `${deploymentUrl}/api/receipts`,
           webhook_output_format: "json",
           webhook_headers: {
             userId,
