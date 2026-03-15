@@ -64,7 +64,7 @@ export const createExtractionJob = async (id: string, userId: string) => {
             "extract.success",
             "extract.error",
           ],
-          webhook_url: `${deploymentUrl}/api/receipts`,
+          webhook_url: `https://receipto-azure.vercel.app/api/receipts`,
           webhook_output_format: "json",
           webhook_headers: {
             userId,
