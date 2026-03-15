@@ -45,6 +45,7 @@ export const createExtractionJob = async (id: string, userId: string) => {
   }
 
   const deploymentUrl = `https://${host}`;
+  console.log("deploymentUrl", deploymentUrl);
 
   return await fetch(`${LLAMA_CLOUD_API_URL}/extraction/jobs`, {
     method: "POST",
