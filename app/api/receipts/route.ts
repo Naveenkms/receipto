@@ -1,11 +1,10 @@
-import { createClient } from "@/lib/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
-import { redirect } from "next/navigation";
+import z from "zod";
+
 import { addReceipt } from "@/lib/data/receipts";
 
 const LLAMA_CLOUD_API_URL = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL;
 const LLAMA_CLOUD_API_KEY = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_KEY;
-const AGENT_ID = process.env.NEXT_PUBLIC_LLAMA_CLOUD_AGENT_ID;
 
 export type ExtractionData = Partial<{
   storeName: string;
@@ -39,23 +38,20 @@ type ExtractionResult = {
   data: ExtractionData;
 };
 
-export async function GET() {
-  return Response.json({ id: "hello" });
-}
+const schema = z.object({
+  job_id: z.string(),
+});
 
 export async function POST(request: NextRequest) {
-  //   const supabase = await createClient();
+  const result = schema.safeParse(await request.json());
 
-  //   const { data: userData, error } = await supabase.auth.getUser();
-
-  //   if (error || !userData) {
-  //     redirect("/auth/login");
-  //   }
-  // console.log("request!!!!!!!!!!!", request);
-
-  const {
-    data: { job_id: jobId },
-  } = await request.json();
+  if (!result.success) {
+    return NextResponse.json(
+      { message: "Invalid request body", error: result.error },
+      { status: 400 },
+    );
+  }
+  const { job_id: jobId } = result.data;
 
   const userId = request.headers.get("userId");
 
@@ -83,7 +79,7 @@ export async function POST(request: NextRequest) {
   }
 
   const { data } = (await response.json()) as ExtractionResult;
-  
+
   await addReceipt({
     userId: userId,
     total: data?.total.toString(),
