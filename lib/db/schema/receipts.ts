@@ -10,10 +10,10 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { authenticatedRole, authUid, authUsers } from "drizzle-orm/supabase";
+import { eq } from "drizzle-orm";
 
 import { timestamps } from "../helpers/columns";
-import { ExtractionData } from "@/app/api/receipts/extract/route";
-import { eq, sql } from "drizzle-orm";
+import { ExtractionData } from "@/app/api/receipts/route";
 
 export const receipts = pgTable(
   "receipts",
