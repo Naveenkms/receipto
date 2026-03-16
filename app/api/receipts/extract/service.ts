@@ -12,7 +12,7 @@ export type Response = {
 
 const LLAMA_CLOUD_API_URL = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_URL;
 const LLAMA_CLOUD_API_KEY = process.env.NEXT_PUBLIC_LLAMA_CLOUD_API_KEY;
-const AGENT_ID = process.env.NEXT_PUBLIC_LLAMA_CLOUD_AGENT_ID;
+const LLAMA_CLOUD_AGENT_ID = process.env.NEXT_PUBLIC_LLAMA_CLOUD_AGENT_ID;
 
 export const uploadFileToExtractionAgent = async (
   file: File,
@@ -55,7 +55,7 @@ export const createExtractionJob = async (id: string, userId: string) => {
       Authorization: `Bearer ${LLAMA_CLOUD_API_KEY}`,
     },
     body: JSON.stringify({
-      extraction_agent_id: AGENT_ID,
+      extraction_agent_id: LLAMA_CLOUD_AGENT_ID,
       file_id: id,
       webhook_configurations: [
         {

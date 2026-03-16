@@ -56,7 +56,6 @@ export default function AddReceiptPage() {
       });
 
       toast.success("Receipt added successfully");
-      // console.log("Receipt added successfully:", data);
     } catch (error) {
       toast.error("Failed to add receipt");
       console.error("Error adding receipt:", error);
