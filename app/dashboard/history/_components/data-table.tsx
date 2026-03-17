@@ -12,7 +12,6 @@ import { getReceipts } from "@/lib/data/receipts";
 import Delete from "./delete";
 
 async function DataTable() {
-  await new Promise((resolve) => setTimeout(resolve, 5000));
   const { data, error } = await getReceipts();
 
   if (error)
