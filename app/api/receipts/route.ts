@@ -39,7 +39,9 @@ type ExtractionResult = {
 };
 
 const schema = z.object({
-  job_id: z.string(),
+  data: z.object({
+    job_id: z.string(),
+  }),
 });
 
 export async function POST(request: NextRequest) {
@@ -51,7 +53,9 @@ export async function POST(request: NextRequest) {
       { status: 400 },
     );
   }
-  const { job_id: jobId } = result.data;
+  const {
+    data: { job_id: jobId },
+  } = result.data;
 
   const userId = request.headers.get("userId");
 
