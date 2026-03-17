@@ -1,7 +1,7 @@
 "use client";
 
 import { Upload, X } from "lucide-react";
-import React from "react";
+import React, { useRef } from "react";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -33,8 +33,13 @@ const maxFiles = 1;
 export default function AddReceiptPage() {
   const [isPending, setIsPending] = React.useState(false);
 
+  const fileUploadRef = useRef<{ clear: () => void }>({
+    clear: () => {},
+  });
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
+    reValidateMode: "onSubmit",
   });
 
   const onsubmit = async ({ file }: z.infer<typeof schema>) => {
@@ -55,12 +60,19 @@ export default function AddReceiptPage() {
         }),
       });
 
+      if (!res.ok) {
+        throw new Error("Failed to add receipt");
+      }
+
       toast.success("Receipt added successfully");
     } catch (error) {
-      toast.error("Failed to add receipt");
-      console.error("Error adding receipt:", error);
+      toast.error(
+        error instanceof Error ? error.message : "Failed to add receipt",
+      );
+      console.error(error);
     } finally {
       setIsPending(false);
+      fileUploadRef.current?.clear();
       form.reset();
     }
   };
@@ -89,6 +101,7 @@ export default function AddReceiptPage() {
                     }}
                     maxFiles={maxFiles}
                     maxSize={maxSize}
+                    ref={fileUploadRef}
                   >
                     <FileUploadDropzone>
                       <div className="flex flex-col items-center gap-1">
